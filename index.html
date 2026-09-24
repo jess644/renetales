@@ -1,0 +1,1666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rene Tales · share your stories</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sawarabi+Mincho&family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --sakura: #ffb7c5;
+  --sakura-deep: #ff8fab;
+  --sakura-dark: #e75480;
+  --purple: #9d7bde;
+  --purple-dark: #6b4ba8;
+  --lavender: #e6d9ff;
+  --bg: #fdf3f7;
+  --text-main: #3d2a4a;
+  --text-muted: #8b7a95;
+  --border-light: #f0d9e5;
+  --gold: #ffc857;
+  --shadow-sm: 0 4px 12px rgba(233, 130, 170, 0.12);
+  --shadow-md: 0 8px 24px rgba(157, 123, 222, 0.15);
+  --shadow-lg: 0 16px 40px rgba(255, 143, 171, 0.25);
+  --radius-md: 20px;
+  --radius-sm: 14px;
+  --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+  font-family: 'Zen Maru Gothic', 'Sawarabi Mincho', sans-serif;
+  background: var(--bg);
+  background-image:
+    radial-gradient(circle at 10% 20%, rgba(255, 183, 197, 0.25) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(157, 123, 222, 0.2) 0%, transparent 40%);
+  color: var(--text-main);
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+/* NAVBAR */
+.navbar {
+  background: linear-gradient(135deg, #ffb7c5 0%, #c89de8 50%, #9d7bde 100%);
+  color: white;
+  padding: 0.9rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  box-shadow: 0 4px 20px rgba(157, 123, 222, 0.3);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+/* LOGO WRAP with tagline */
+.logo-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+.logo {
+  display: flex; align-items: center; gap: 0.6rem;
+  font-family: 'Sawarabi Mincho', serif;
+  font-weight: 700; font-size: 1.7rem;
+  color: white; text-decoration: none;
+  cursor: pointer;
+  line-height: 1;
+}
+.logo i { font-size: 1.8rem; animation: sway 3s ease-in-out infinite; }
+@keyframes sway { 0%,100% { transform: rotate(-8deg);} 50% { transform: rotate(8deg);} }
+
+.tagline {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.95);
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  font-style: italic;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.15);
+  padding-left: 2.5rem;
+  margin-top: 2px;
+}
+
+.nav-links { display: flex; align-items: center; gap: 2rem; }
+.nav-links a {
+  color: white; text-decoration: none; font-weight: 500;
+  font-size: 0.95rem; display: flex; align-items: center;
+  gap: 0.4rem; transition: var(--transition);
+  padding: 0.4rem 0.2rem; border-bottom: 2px solid transparent;
+  cursor: pointer;
+}
+.nav-links a:hover { border-bottom-color: rgba(255,255,255,0.6); transform: translateY(-2px); }
+.nav-links a.active { border-bottom-color: #fff; font-weight: 700; }
+
+.search-bar {
+  display: flex; align-items: center;
+  background: rgba(255,255,255,0.25);
+  border-radius: 40px; padding: 0.3rem 0.3rem 0.3rem 1rem;
+  border: 1px solid rgba(255,255,255,0.4);
+}
+.search-bar i { color: white; font-size: 0.9rem; }
+.search-bar input {
+  background: transparent; border: none; padding: 0.45rem 0.6rem;
+  color: white; font-size: 0.9rem; outline: none; width: 160px;
+  font-family: inherit;
+}
+.search-bar input::placeholder { color: rgba(255,255,255,0.85); }
+.search-bar button {
+  background: white; border: none; color: var(--purple-dark);
+  border-radius: 30px; padding: 0.45rem 1rem; font-weight: 700;
+  font-size: 0.85rem; cursor: pointer; transition: var(--transition);
+  font-family: inherit;
+}
+.search-bar button:hover { background: var(--gold); transform: scale(1.05); }
+
+/* LAYOUT */
+.container {
+  max-width: 1280px; margin: 0 auto;
+  padding: 2rem 1.5rem 3rem; flex: 1; width: 100%;
+}
+.page { display: none; animation: fadeSlide 0.35s ease; }
+.page.active { display: block; }
+@keyframes fadeSlide {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* HERO */
+.upload-section {
+  background: linear-gradient(135deg, #ffffff 0%, #fff5f7 60%, #f0e4ff 100%);
+  border-radius: var(--radius-md);
+  padding: 2.5rem; margin-bottom: 2.5rem;
+  box-shadow: var(--shadow-md); border: 2px solid white;
+  display: flex; flex-wrap: wrap; align-items: center;
+  justify-content: space-between; gap: 1.5rem;
+  position: relative; overflow: hidden;
+}
+.upload-section::after {
+  content: '🌸'; position: absolute; bottom: -20px; right: 120px;
+  font-size: 5rem; opacity: 0.4;
+}
+.upload-text { position: relative; z-index: 1; }
+.upload-text h2 {
+  font-family: 'Sawarabi Mincho', serif;
+  font-size: 2.1rem; font-weight: 700;
+  color: var(--purple-dark); margin-bottom: 0.3rem;
+}
+.upload-text p { color: var(--text-muted); font-size: 1rem; max-width: 500px; }
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--sakura-deep), var(--purple));
+  color: white; border: none; font-weight: 700; font-size: 1.05rem;
+  padding: 0.9rem 2rem; border-radius: 60px;
+  display: inline-flex; align-items: center; gap: 0.7rem;
+  cursor: pointer; transition: var(--transition);
+  box-shadow: 0 8px 20px rgba(255, 143, 171, 0.4);
+  text-decoration: none; font-family: inherit;
+  position: relative; z-index: 1;
+}
+.btn-primary:hover { transform: translateY(-3px) scale(1.03); }
+
+.btn-secondary {
+  background: white; color: var(--purple-dark);
+  border: 2px solid var(--lavender);
+  font-weight: 700; font-size: 0.95rem;
+  padding: 0.7rem 1.5rem; border-radius: 60px;
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  cursor: pointer; transition: var(--transition);
+  font-family: inherit;
+}
+.btn-secondary:hover { background: var(--lavender); transform: translateY(-2px); }
+.btn-secondary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+/* FORM */
+.upload-form {
+  background: white; border-radius: var(--radius-md);
+  padding: 2rem 2.5rem; margin-bottom: 3rem;
+  box-shadow: var(--shadow-md); border: 2px solid var(--border-light);
+  position: relative;
+}
+.upload-form::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, var(--sakura), var(--purple), var(--gold), var(--sakura));
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  background-size: 200% 100%;
+  animation: shimmer 4s linear infinite;
+}
+@keyframes shimmer { to { background-position: 200% 0; } }
+
+.upload-form h3 {
+  font-family: 'Sawarabi Mincho', serif;
+  font-size: 1.5rem; font-weight: 700;
+  color: var(--purple-dark); margin-bottom: 1.5rem;
+  display: flex; align-items: center; gap: 0.6rem;
+}
+.upload-form h3 i { color: var(--sakura-dark); }
+
+.form-row { display: flex; flex-wrap: wrap; gap: 1.2rem; margin-bottom: 1.2rem; }
+.form-group { flex: 1; min-width: 220px; display: flex; flex-direction: column; }
+.form-group label {
+  font-weight: 700; font-size: 0.85rem;
+  margin-bottom: 0.4rem; color: var(--purple-dark);
+}
+.form-group input, .form-group textarea {
+  width: 100%; padding: 0.8rem 1rem;
+  border: 2px solid var(--border-light); border-radius: 12px;
+  font-family: inherit; font-size: 0.9rem; outline: none;
+  transition: var(--transition); background: #fffafc;
+  color: var(--text-main);
+}
+.form-group input:focus, .form-group textarea:focus {
+  border-color: var(--sakura-deep);
+  box-shadow: 0 0 0 4px rgba(255, 143, 171, 0.15);
+  background: white;
+}
+.form-group textarea { min-height: 90px; resize: vertical; }
+
+.image-preview {
+  margin-top: 0.6rem; width: 90px; height: 120px;
+  border-radius: 10px; border: 2px dashed var(--border-light);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-muted); font-size: 0.7rem;
+  overflow: hidden; background: #fdf3f7; text-align: center;
+}
+.image-preview img { width: 100%; height: 100%; object-fit: cover; }
+
+.btn-submit {
+  background: linear-gradient(135deg, var(--sakura-deep), var(--purple));
+  color: white; border: none; font-weight: 700;
+  padding: 1rem 2.5rem; border-radius: 60px;
+  font-size: 1rem; cursor: pointer; transition: var(--transition);
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  box-shadow: 0 8px 20px rgba(255, 143, 171, 0.4);
+  font-family: inherit; margin-top: 0.5rem;
+}
+.btn-submit:hover { transform: translateY(-3px); }
+
+/* SECTION TITLE */
+.section-title {
+  display: flex; align-items: baseline;
+  justify-content: space-between; margin-bottom: 1.5rem;
+  flex-wrap: wrap; gap: 0.8rem;
+}
+.section-title h3 {
+  font-family: 'Sawarabi Mincho', serif;
+  font-size: 1.6rem; font-weight: 700;
+  color: var(--purple-dark);
+  display: flex; align-items: center; gap: 0.6rem;
+}
+.section-title h3 i { color: var(--sakura-dark); font-size: 1.5rem; }
+.section-title .badge {
+  background: linear-gradient(135deg, var(--lavender), var(--sakura));
+  color: var(--purple-dark); font-size: 0.8rem;
+  font-weight: 700; padding: 0.4rem 1rem;
+  border-radius: 40px; box-shadow: var(--shadow-sm);
+}
+
+/* DISCOVER */
+.discover-layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+@media (max-width: 900px) { .discover-layout { grid-template-columns: 1fr; } }
+
+/* SAINT RENE PANEL */
+.hinata-panel {
+  position: sticky; top: 100px;
+  background: linear-gradient(160deg, #fef3f8 0%, #f3e6ff 100%);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md); border: 2px solid white;
+  text-align: center; overflow: hidden;
+  transition: var(--transition);
+}
+.hinata-panel:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+
+.saint-avatar {
+  width: 200px; height: 200px; margin: 0 auto 1rem;
+  border-radius: 50%;
+  border: 4px solid white;
+  box-shadow: 0 8px 24px rgba(157, 123, 222, 0.3);
+  position: relative; overflow: hidden;
+  animation: bob 4s ease-in-out infinite;
+  cursor: pointer;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  background: linear-gradient(135deg, var(--lavender), var(--sakura));
+}
+.saint-avatar:hover { transform: scale(1.06) rotate(-3deg); }
+.saint-avatar:active { transform: scale(0.95); }
+.saint-avatar img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+@keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+.hinata-speech {
+  background: white; border-radius: 16px;
+  padding: 0.7rem 1rem; font-size: 0.85rem;
+  color: var(--purple-dark); font-weight: 600;
+  position: relative; margin-bottom: 1rem;
+  box-shadow: var(--shadow-sm);
+  border: 2px solid var(--lavender);
+  min-height: 60px;
+  display: flex; align-items: center; justify-content: center;
+  transition: var(--transition);
+}
+.hinata-speech::before {
+  content: ''; position: absolute; top: -10px; left: 50%;
+  transform: translateX(-50%);
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid var(--lavender);
+}
+.hinata-speech::after {
+  content: ''; position: absolute; top: -7px; left: 50%;
+  transform: translateX(-50%);
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid white;
+}
+.hinata-name {
+  font-family: 'Sawarabi Mincho', serif;
+  font-size: 1.3rem; font-weight: 700;
+  color: var(--purple-dark); margin-bottom: 0.2rem;
+}
+.hinata-title {
+  font-size: 0.8rem; color: var(--sakura-dark);
+  font-weight: 600; letter-spacing: 0.5px;
+  text-transform: uppercase; margin-bottom: 0.8rem;
+}
+.hinata-stats {
+  display: flex; justify-content: space-around;
+  gap: 0.5rem; margin-top: 1rem;
+  padding-top: 1rem; border-top: 2px dashed var(--lavender);
+}
+.hinata-stat {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 0.2rem;
+  font-size: 0.7rem; color: var(--text-muted);
+}
+.hinata-stat strong {
+  font-size: 1.1rem; color: var(--purple-dark);
+  font-family: 'Sawarabi Mincho', serif;
+}
+.hinata-stat i { color: var(--sakura-dark); font-size: 1rem; margin-bottom: 0.15rem; }
+.hinata-actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
+.hinata-btn {
+  flex: 1;
+  background: linear-gradient(135deg, var(--sakura-deep), var(--purple));
+  color: white; border: none; border-radius: 30px;
+  padding: 0.6rem 0.5rem; font-weight: 700;
+  font-size: 0.78rem; cursor: pointer;
+  transition: var(--transition); font-family: inherit;
+  display: flex; align-items: center; justify-content: center;
+  gap: 0.3rem;
+}
+.hinata-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(157, 123, 222, 0.4); }
+
+.heart-burst {
+  position: fixed; font-size: 1.2rem; pointer-events: none;
+  animation: heartFloat 1.2s ease-out forwards; z-index: 999;
+}
+@keyframes heartFloat {
+  0% { opacity: 1; transform: translate(0, 0) scale(0.5); }
+  100% { opacity: 0; transform: translate(var(--tx, 0), var(--ty, -80px)) scale(1.3); }
+}
+
+/* STORY GRID */
+.story-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem; margin-bottom: 2rem;
+}
+.empty-state {
+  grid-column: 1 / -1; background: white;
+  border: 2px dashed var(--sakura);
+  border-radius: var(--radius-md);
+  padding: 4rem 2rem; text-align: center;
+  color: var(--text-muted); box-shadow: var(--shadow-sm);
+}
+.empty-state i {
+  font-size: 4rem;
+  background: linear-gradient(135deg, var(--sakura-deep), var(--purple));
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 1rem; display: block;
+}
+.empty-state h4 {
+  font-family: 'Sawarabi Mincho', serif;
+  font-size: 1.4rem; font-weight: 700;
+  color: var(--purple-dark); margin-bottom: 0.5rem;
+}
+.empty-state p { font-size: 0.95rem; max-width: 420px; margin: 0 auto 1.5rem; }
+
+.story-card {
+  background: white; border-radius: var(--radius-sm);
+  overflow: hidden; box-shadow: var(--shadow-sm);
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border: 2px solid var(--border-light);
+  display: flex; flex-direction: column; position: relative;
+  animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
+}
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.85) translateY(15px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+.story-card:hover {
+  transform: translateY(-10px) rotate(-1.5deg) scale(1.02);
+  box-shadow: 0 20px 45px rgba(157, 123, 222, 0.35);
+  border-color: var(--sakura-deep);
+}
+
+.story-cover {
+  aspect-ratio: 2 / 3;
+  background: linear-gradient(135deg, var(--lavender), var(--sakura));
+  position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  color: white;
+}
+.story-cover img {
+  width: 100%; height: 100%; object-fit: cover;
+  display: block; transition: transform 0.5s ease;
+}
+.story-card:hover .story-cover img { transform: scale(1.08); }
+.story-cover .placeholder-icon { font-size: 3.5rem; color: rgba(255,255,255,0.85); }
+
+.story-genre {
+  position: absolute; top: 10px; left: 10px;
+  background: linear-gradient(135deg, var(--sakura-dark), var(--purple-dark));
+  color: white; font-size: 0.65rem; font-weight: 700;
+  padding: 0.3rem 0.8rem; border-radius: 30px;
+  letter-spacing: 0.5px; text-transform: uppercase; z-index: 2;
+}
+.chapter-badge {
+  position: absolute; bottom: 10px; right: 10px;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  color: white; font-size: 0.7rem; font-weight: 700;
+  padding: 0.3rem 0.7rem; border-radius: 30px;
+  display: flex; align-items: center; gap: 0.3rem; z-index: 2;
+}
+.delete-btn {
+  position: absolute; top: 10px; right: 10px;
+  background: rgba(255,255,255,0.9); border: none;
+  width: 30px; height: 30px; border-radius: 50%;
+  color: var(--sakura-dark); cursor: pointer; z-index: 3;
+  font-size: 0.8rem; display: flex; align-items: center;
+  justify-content: center; transition: var(--transition);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15); opacity: 0;
+}
+.story-card:hover .delete-btn { opacity: 1; }
+.delete-btn:hover {
+  background: var(--sakura-dark); color: white;
+  transform: scale(1.15) rotate(8deg);
+}
+
+.story-info {
+  padding: 1rem 1rem 1.2rem;
+  display: flex; flex-direction: column;
+  gap: 0.25rem; background: white;
+}
+.story-title {
+  font-family: 'Sawarabi Mincho', serif;
+  font-weight: 700; font-size: 1.05rem;
+  color: var(--purple-dark); line-height: 1.3;
+  display: -webkit-box; -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical; overflow: hidden;
+}
+.story-author {
+  display: flex; align-items: center; gap: 0.4rem;
+  font-size: 0.8rem; color: var(--text-muted);
+}
+.story-author i { font-size: 0.75rem; color: var(--sakura-dark); }
+.story-desc {
+  font-size: 0.78rem; color: var(--text-muted);
+  margin-top: 0.3rem;
+  display: -webkit-box; -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical; overflow: hidden; line-height: 1.4;
+}
+.story-stats {
+  display: flex; gap: 0.9rem; margin-top: 0.5rem;
+  font-size: 0.72rem; color: var(--text-muted); align-items: center;
+}
+.story-stats i { margin-right: 0.2rem; font-size: 0.7rem; color: var(--gold); }
+.story-stats .like-stat i { color: var(--sakura-dark); }
+
+.card-actions {
+  display: flex; gap: 0.4rem;
+  margin-top: 0.6rem; padding-top: 0.6rem;
+  border-top: 1px dashed var(--border-light);
+  opacity: 0; max-height: 0;
+  transition: all 0.3s ease; overflow: hidden;
+}
+.story-card:hover .card-actions { opacity: 1; max-height: 60px; }
+.card-action {
+  flex: 1; background: #fdf3f7; border: none;
+  border-radius: 20px; padding: 0.4rem;
+  font-size: 0.72rem; font-weight: 700;
+  color: var(--purple-dark); cursor: pointer;
+  transition: var(--transition); font-family: inherit;
+  display: flex; align-items: center; justify-content: center;
+  gap: 0.3rem;
+}
+.card-action:hover { background: var(--lavender); transform: scale(1.05); }
+.card-action.liked { background: linear-gradient(135deg, var(--sakura-deep), var(--sakura-dark)); color: white; }
+.card-action.liked i { color: white; }
+
+/* STORY DETAIL PAGE */
+.story-detail-hero {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 2.5rem;
+  background: white;
+  border-radius: var(--radius-md);
+  padding: 2.5rem;
+  box-shadow: var(--shadow-md);
+  border: 2px solid var(--border-light);
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+@media (max-width: 700px) {
+  .story-detail-hero { grid-template-columns: 1fr; }
+}
+
+.detail-cover {
+  aspect-ratio: 2 / 3;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  background: linear-gradient(135deg, var(--lavender), var(--sakura));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 4rem;
+}
+.detail-cover img { width: 100%; height: 100%; object-fit: cover; }
+
+.detail-info { position: relative; z-index: 1; }
+.detail-genre {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--sakura-dark), var(--purple-dark));
+  color: white; font-size: 0.7rem; font-weight: 700;
+  padding: 0.3rem 0.9rem; border-radius: 30px;
+  letter-spacing: 0.5px; text-transform: uppercase;
+  margin-bottom: 0.8rem;
+}
+.detail-title {
+  font-family: 'Sawarabi Mincho', serif;
+  font-size: 2.2rem; font-weight: 700;
+  color: var(--purple-dark); line-height: 1.2;
+  margin-bottom: 0.5rem;
+}
+.detail-author {
+  font-size: 1rem; color: var(--text-muted); margin-bottom: 1rem;
+}
+.detail-author i { color: var(--sakura-dark); margin-right: 0.3rem; }
+.detail-desc {
+  font-size: 0.95rem; color: var(--text-main);
+  line-height: 1.7; margin-bottom: 1.5rem;
+  background: #fdf3f7; padding: 1rem 1.2rem;
+  border-radius: 12px; border-left: 4px solid var(--sakura);
+}
+.detail-stats {
+  display: flex; gap: 1.5rem;
+  margin-bottom: 1.5rem; flex-wrap: wrap;
+}
+.detail-stat {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 0.2rem;
+  padding: 0.6rem 1rem;
+  background: #fdf3f7; border-radius: 12px;
+  min-width: 90px;
+}
+.detail-stat strong {
+  font-size: 1.3rem; color: var(--purple-dark);
+  font-family: 'Sawarabi Mincho', serif;
+}
+.detail-stat span {
+  font-size: 0.7rem; color: var(--text-muted);
+  text-transform: uppercase; font-weight: 700;
+  letter-spacing: 0.5px;
+}
+.detail-stat i { color: var(--sakura-dark); font-size: 1rem; margin-bottom: 0.2rem; }
+.detail-actions { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+
+/* Reading page */
+.reading-header {
+  background: linear-gradient(135deg, var(--sakura), var(--purple));
+  color: white;
+  padding: 1.5rem 2rem;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.reading-header .rh-left { display: flex; flex-direction: column; gap: 0.2rem; }
+.reading-header h2 {
+  font-family: 'Sawarabi Mincho', serif;
+  font-size: 1.6rem; font-weight: 700; line-height: 1.2;
+}
+.reading-header .rh-sub { font-size: 0.85rem; opacity: 0.95; }
+
+.reading-body {
+  background: white;
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  padding: 2.5rem 3rem;
+  box-shadow: var(--shadow-md);
+  border: 2px solid var(--border-light);
+  border-top: none;
+  margin-bottom: 1.5rem;
+}
+@media (max-width: 700px) { .reading-body { padding: 1.5rem; } }
+.reading-content {
+  font-size: 1.05rem; line-height: 2;
+  color: var(--text-main); white-space: pre-wrap;
+  word-wrap: break-word;
+  font-family: 'Zen Maru Gothic', sans-serif;
+  min-height: 200px;
+}
+.reading-nav {
+  display: flex; justify-content: space-between;
+  gap: 1rem; flex-wrap: wrap; margin-top: 1rem;
+}
+
+.chapter-list-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: white;
+  color: var(--purple-dark);
+  border: 2px solid var(--lavender);
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 60px;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+  margin-bottom: 1rem;
+}
+.chapter-list-trigger:hover {
+  background: var(--lavender);
+  transform: translateY(-2px);
+}
+
+/* Chapter modal */
+.chapter-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(61, 42, 74, 0.55);
+  backdrop-filter: blur(6px);
+  z-index: 500;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  animation: fadeIn 0.2s ease;
+}
+.chapter-modal-overlay.active { display: flex; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.chapter-modal {
+  background: white;
+  border-radius: var(--radius-md);
+  width: 100%;
+  max-width: 640px;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+  border: 3px solid white;
+  animation: modalIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.9) translateY(20px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.chapter-modal-header {
+  background: linear-gradient(135deg, var(--sakura), var(--purple));
+  color: white;
+  padding: 1.3rem 1.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.chapter-modal-header h3 {
+  font-family: 'Sawarabi Mincho', serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.chapter-modal-header .close-modal {
+  background: rgba(255,255,255,0.25);
+  border: none;
+  color: white;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.chapter-modal-header .close-modal:hover {
+  background: rgba(255,255,255,0.4);
+  transform: rotate(90deg);
+}
+
+.chapter-modal-body { padding: 1.5rem 1.8rem; }
+.chapter-modal-body .chapter-item {
+  border: 2px solid var(--border-light);
+  border-radius: 12px;
+  padding: 1rem 1.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  transition: var(--transition);
+  cursor: pointer;
+  margin-bottom: 0.6rem;
+  background: white;
+}
+.chapter-modal-body .chapter-item:hover {
+  border-color: var(--sakura-deep);
+  background: #fff5f9;
+  transform: translateX(4px);
+}
+.chapter-modal-body .chapter-item.current {
+  border-color: var(--sakura-dark);
+  background: linear-gradient(135deg, #fff5f9, #f0e4ff);
+  box-shadow: 0 4px 12px rgba(255, 143, 171, 0.2);
+}
+.chapter-modal-body .chapter-item.current .chapter-num {
+  background: linear-gradient(135deg, var(--sakura-dark), var(--purple-dark));
+  transform: scale(1.05);
+}
+
+/* Add chapter box */
+.write-chapter-box {
+  background: #fdf3f7;
+  border: 2px dashed var(--sakura);
+  border-radius: 14px;
+  padding: 1.5rem; margin-top: 1.5rem;
+}
+.write-chapter-box h4 {
+  font-family: 'Sawarabi Mincho', serif;
+  color: var(--purple-dark);
+  margin-bottom: 1rem; font-size: 1.15rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.write-chapter-box h4 i { color: var(--sakura-dark); }
+.write-chapter-box input,
+.write-chapter-box textarea {
+  width: 100%; padding: 0.8rem 1rem;
+  border: 2px solid var(--border-light);
+  border-radius: 10px; font-family: inherit;
+  font-size: 0.9rem; outline: none;
+  transition: var(--transition);
+  background: white; color: var(--text-main);
+  margin-bottom: 0.8rem;
+}
+.write-chapter-box textarea {
+  min-height: 180px; resize: vertical; line-height: 1.7;
+}
+.write-chapter-box input:focus,
+.write-chapter-box textarea:focus {
+  border-color: var(--sakura-deep);
+  box-shadow: 0 0 0 4px rgba(255, 143, 171, 0.15);
+}
+
+/* Chapter list (inside story detail) */
+.chapter-list {
+  display: flex; flex-direction: column;
+  gap: 0.7rem; margin-bottom: 1.5rem;
+}
+.chapter-item {
+  background: white;
+  border: 2px solid var(--border-light);
+  border-radius: 12px;
+  padding: 1rem 1.3rem;
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 1rem;
+  transition: var(--transition);
+  cursor: pointer;
+}
+.chapter-item:hover {
+  border-color: var(--sakura-deep);
+  background: #fff5f9;
+  transform: translateX(4px);
+  box-shadow: var(--shadow-sm);
+}
+.chapter-item .ch-left {
+  display: flex; align-items: center;
+  gap: 0.9rem; flex: 1; min-width: 0;
+}
+.chapter-num {
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--sakura-deep), var(--purple));
+  color: white; font-weight: 700;
+  font-family: 'Sawarabi Mincho', serif;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; font-size: 1rem;
+  box-shadow: 0 4px 10px rgba(157, 123, 222, 0.3);
+  transition: var(--transition);
+}
+.chapter-item .ch-title {
+  font-weight: 700; color: var(--purple-dark);
+  font-size: 1rem; white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis;
+}
+.chapter-item .ch-meta {
+  font-size: 0.72rem; color: var(--text-muted);
+  margin-top: 0.15rem;
+}
+.chapter-item i.fa-chevron-right {
+  color: var(--sakura-dark); transition: var(--transition);
+}
+.chapter-item:hover i.fa-chevron-right { transform: translateX(4px); }
+
+/* TOAST */
+.toast {
+  position: fixed; bottom: 30px; left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: linear-gradient(135deg, var(--sakura-deep), var(--purple));
+  color: white; padding: 0.9rem 1.8rem; border-radius: 60px;
+  font-weight: 700; box-shadow: var(--shadow-lg); z-index: 9999;
+  opacity: 0; transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex; align-items: center; gap: 0.6rem;
+  pointer-events: none; max-width: 90%;
+}
+.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+/* Floating Saint Rene */
+.floating-hinata {
+  position: fixed; bottom: 30px; right: 30px;
+  width: 80px; height: 80px; border-radius: 50%;
+  border: 3px solid white;
+  box-shadow: 0 8px 24px rgba(157, 123, 222, 0.4);
+  cursor: pointer; z-index: 100;
+  transition: var(--transition);
+  animation: bobSmall 3s ease-in-out infinite;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--lavender), var(--sakura));
+}
+.floating-hinata img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.floating-hinata:hover {
+  transform: scale(1.15) rotate(-8deg);
+  box-shadow: 0 12px 32px rgba(255, 143, 171, 0.6);
+}
+@keyframes bobSmall { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+
+.footer {
+  text-align: center; padding: 1.5rem 1rem;
+  border-top: 2px solid var(--border-light);
+  color: var(--text-muted); font-size: 0.85rem;
+  background: white; margin-top: 1rem;
+}
+
+@media (max-width: 700px) {
+  .navbar { padding: 0.9rem 1.2rem; flex-direction: column; align-items: stretch; }
+  .nav-links { justify-content: space-between; gap: 0.8rem; }
+  .search-bar input { width: 100%; }
+  .upload-section { padding: 1.8rem; flex-direction: column; text-align: center; }
+  .upload-form { padding: 1.5rem; }
+  .upload-text h2 { font-size: 1.6rem; }
+  .story-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1.2rem; }
+  .floating-hinata { width: 60px; height: 60px; bottom: 20px; right: 20px; }
+  .detail-title { font-size: 1.6rem; }
+  .reading-header h2 { font-size: 1.2rem; }
+  .tagline { padding-left: 0; font-size: 0.68rem; }
+  .logo { font-size: 1.5rem; }
+  .logo i { font-size: 1.6rem; }
+}
+@media (max-width: 450px) {
+  .story-grid { grid-template-columns: 1fr 1fr; }
+  .story-info { padding: 0.8rem; }
+  .story-title { font-size: 0.9rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="navbar">
+  <div class="logo-wrap">
+    <a class="logo" data-nav="discover"><i class="fas fa-fan"></i> Rene Tales</a>
+    <span class="tagline">✨ just a kid with a big dream ✨</span>
+  </div>
+  <div class="nav-links">
+    <a data-nav="discover" class="active"><i class="fas fa-compass"></i> Discover</a>
+    <a data-nav="library"><i class="fas fa-bookmark"></i> Library</a>
+    <a data-nav="write"><i class="fas fa-pen-fancy"></i> Write</a>
+  </div>
+  <div class="search-bar">
+    <i class="fas fa-search"></i>
+    <input type="text" id="searchInput" placeholder="Search stories...">
+    <button id="searchBtn">Search</button>
+  </div>
+</header>
+
+<main class="container">
+
+  <section class="page active" id="page-discover">
+    <section class="upload-section">
+      <div class="upload-text">
+        <h2>Discover stories 🌸</h2>
+        <p>Click any story to open its page and read chapters!</p>
+      </div>
+      <button class="btn-primary" data-nav="write"><i class="fas fa-cloud-upload-alt"></i> Upload story</button>
+    </section>
+
+    <div class="discover-layout">
+      <aside class="hinata-panel">
+        <div class="saint-avatar" id="hinataAvatar" title="Click me!">
+          <img src="https://cdn.manilastandard.net/wp-content/uploads/2026/07/saint-rene-baterbonia-july-12-2026.jpg" alt="Saint Rene" onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22><rect width=%22200%22 height=%22200%22 fill=%22%23e6d9ff%22/><text x=%22100%22 y=%22115%22 font-size=%2270%22 text-anchor=%22middle%22 fill=%22%239d7bde%22>SR</text></svg>';">
+        </div>
+        <div class="hinata-speech" id="hinataSpeech">"Hi, I'm Saint Rene... let's read some stories together!" 🌸</div>
+        <div class="hinata-name">Saint Rene</div>
+        <div class="hinata-title">✦ Your Reading Guide ✦</div>
+        <div class="hinata-stats">
+          <div class="hinata-stat"><i class="fas fa-heart"></i><strong id="hinataHearts">0</strong><span>hearts</span></div>
+          <div class="hinata-stat"><i class="fas fa-book"></i><strong id="hinataBooks">0</strong><span>stories</span></div>
+        </div>
+        <div class="hinata-actions">
+          <button class="hinata-btn" id="hinataSurprise"><i class="fas fa-star"></i> Tip</button>
+        </div>
+      </aside>
+
+      <div>
+        <div class="section-title">
+          <h3><i class="fas fa-fire"></i> All stories</h3>
+          <span class="badge" id="discoverCount">✨ 0 stories</span>
+        </div>
+        <div class="story-grid" id="discoverGrid"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page" id="page-library">
+    <section class="upload-section">
+      <div class="upload-text">
+        <h2>Your library 📚</h2>
+        <p>Click any story to manage it and add chapters.</p>
+      </div>
+      <button class="btn-primary" data-nav="write"><i class="fas fa-plus"></i> New story</button>
+    </section>
+    <div class="section-title">
+      <h3><i class="fas fa-bookmark"></i> My stories</h3>
+      <span class="badge" id="libraryCount">✨ 0 stories</span>
+    </div>
+    <div class="story-grid" id="libraryGrid"></div>
+  </section>
+
+  <section class="page" id="page-write">
+    <section class="upload-section">
+      <div class="upload-text">
+        <h2>Write your story ✍️</h2>
+        <p>Step 1: Create the story. Step 2: Add chapters (Part 1, Part 2, ...)</p>
+      </div>
+    </section>
+
+    <section class="upload-form">
+      <h3><i class="fas fa-feather-alt"></i> Step 1 — Create a story</h3>
+      <form id="storyForm" autocomplete="off">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="storyTitle">Story title</label>
+            <input type="text" id="storyTitle" placeholder="e.g. The Hidden Kingdom">
+          </div>
+          <div class="form-group">
+            <label for="storyAuthor">Author name</label>
+            <input type="text" id="storyAuthor" placeholder="Author name">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="coverImage">Cover picture</label>
+            <input type="file" id="coverImage" accept="image/*">
+            <div class="image-preview" id="imagePreview"><span>Preview</span></div>
+          </div>
+          <div class="form-group">
+            <label for="storyGenre">Genre</label>
+            <input type="text" id="storyGenre" placeholder="Romance, Fantasy..." value="Fantasy">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="storyDesc">Short description</label>
+          <textarea id="storyDesc" placeholder="What is your story about?"></textarea>
+        </div>
+        <button type="submit" class="btn-submit"><i class="fas fa-upload"></i> Create story</button>
+      </form>
+      <p style="margin-top:1rem; font-size:0.85rem; color: var(--text-muted);">
+        💡 After creating, you'll be taken to the story page to add <b>Part 1, Part 2...</b>
+      </p>
+    </section>
+  </section>
+
+  <section class="page" id="page-story">
+    <div id="storyDetailContainer"></div>
+  </section>
+
+  <section class="page" id="page-reading">
+    <div id="readingContainer"></div>
+  </section>
+
+</main>
+
+<div class="chapter-modal-overlay" id="chapterModalOverlay">
+  <div class="chapter-modal">
+    <div class="chapter-modal-header">
+      <h3><i class="fas fa-list-ol"></i> <span id="modalStoryTitle">Chapters</span></h3>
+      <button class="close-modal" id="closeChapterModal"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="chapter-modal-body" id="chapterModalBody"></div>
+  </div>
+</div>
+
+<div class="floating-hinata" id="floatingHinata" title="Say hi to Saint Rene!">
+  <img src="https://cdn.manilastandard.net/wp-content/uploads/2026/07/saint-rene-baterbonia-july-12-2026.jpg" alt="Saint Rene" onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22><rect width=%22200%22 height=%22200%22 fill=%22%23e6d9ff%22/><text x=%22100%22 y=%22115%22 font-size=%2270%22 text-anchor=%22middle%22 fill=%22%239d7bde%22>SR</text></svg>';">
+</div>
+
+<div class="toast" id="toast">
+  <i class="fas fa-check-circle"></i> <span id="toastMsg">Done!</span>
+</div>
+
+<footer class="footer">
+  <p>© 2026 Rene Tales · just a kid with a big dream 🌸</p>
+</footer>
+
+<script>
+const STORAGE_KEY = 'rene_tales_stories_v1';
+const HEARTS_KEY = 'rene_tales_hearts';
+const LIKES_KEY = 'rene_tales_likes';
+const VIEWS_KEY = 'rene_tales_views';
+
+const form = document.getElementById('storyForm');
+const discoverGrid = document.getElementById('discoverGrid');
+const libraryGrid = document.getElementById('libraryGrid');
+const discoverCount = document.getElementById('discoverCount');
+const libraryCount = document.getElementById('libraryCount');
+const imageInput = document.getElementById('coverImage');
+const imagePreview = document.getElementById('imagePreview');
+const toast = document.getElementById('toast');
+const toastMsg = document.getElementById('toastMsg');
+const searchInput = document.getElementById('searchInput');
+const searchBtn = document.getElementById('searchBtn');
+
+const hinataAvatar = document.getElementById('hinataAvatar');
+const hinataSpeech = document.getElementById('hinataSpeech');
+const hinataSurprise = document.getElementById('hinataSurprise');
+const hinataHeartsEl = document.getElementById('hinataHearts');
+const hinataBooksEl = document.getElementById('hinataBooks');
+const floatingHinata = document.getElementById('floatingHinata');
+
+const storyDetailContainer = document.getElementById('storyDetailContainer');
+const readingContainer = document.getElementById('readingContainer');
+
+const chapterModalOverlay = document.getElementById('chapterModalOverlay');
+const chapterModalBody = document.getElementById('chapterModalBody');
+const modalStoryTitle = document.getElementById('modalStoryTitle');
+const closeChapterModal = document.getElementById('closeChapterModal');
+
+let stories = [];
+let currentImageData = null;
+let currentSearch = '';
+let hearts = 0;
+let myLikes = {};
+let myViews = {};
+let activeStoryId = null;
+let activeChapterIndex = -1;
+let lastMainPage = 'discover';
+
+function loadAll() {
+  try { stories = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch (e) { stories = []; }
+  stories.forEach(s => {
+    if (!Array.isArray(s.chapters)) s.chapters = [];
+    if (typeof s.likes !== 'number') s.likes = 0;
+    if (typeof s.views !== 'number') s.views = 0;
+  });
+  try { hearts = parseInt(localStorage.getItem(HEARTS_KEY) || '0', 10) || 0; } catch (e) { hearts = 0; }
+  try { myLikes = JSON.parse(localStorage.getItem(LIKES_KEY) || '{}'); } catch (e) { myLikes = {}; }
+  try { myViews = JSON.parse(localStorage.getItem(VIEWS_KEY) || '{}'); } catch (e) { myViews = {}; }
+}
+
+function saveStories() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(stories)); }
+  catch (e) { showToast('⚠️ Storage full — try smaller images/chapters', true); }
+}
+function saveHearts() { localStorage.setItem(HEARTS_KEY, hearts); hinataHeartsEl.textContent = hearts; }
+function saveMyLikes() { localStorage.setItem(LIKES_KEY, JSON.stringify(myLikes)); }
+function saveMyViews() { localStorage.setItem(VIEWS_KEY, JSON.stringify(myViews)); }
+
+let toastTimer;
+function showToast(msg, isError) {
+  clearTimeout(toastTimer);
+  toastMsg.textContent = msg;
+  toast.style.background = isError
+    ? 'linear-gradient(135deg, #ff6b6b, #c0392b)'
+    : 'linear-gradient(135deg, #ff8fab, #9d7bde)';
+  toast.classList.add('show');
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 2500);
+}
+
+/* Saint Rene tips */
+const saintTips = [
+  '"Tip: Click a story card to open its story page!" 📖',
+  '"Tip: Inside a story, add Part 1, Part 2, Part 3..." ✍️',
+  '"Tip: Views go up when someone reads a chapter!" 👁️',
+  '"Tip: Use the chapter list button to jump between chapters!" ⏭️',
+  '"Tip: Likes = how many readers loved your story!" 💖',
+  '"Tip: You can unlike a story if you change your mind!" 💔',
+  '"Tip: Search works on both Discover and Library!" 🔍'
+];
+
+function hinataSay(text) {
+  if (!hinataSpeech) return;
+  hinataSpeech.style.opacity = '0';
+  setTimeout(() => { hinataSpeech.textContent = text; hinataSpeech.style.opacity = '1'; }, 150);
+}
+function spawnHearts(x, y, count) {
+  count = count || 8;
+  const emojis = ['💜', '🌸', '💗', '✨', '💖'];
+  for (let i = 0; i < count; i++) {
+    const h = document.createElement('span');
+    h.className = 'heart-burst';
+    h.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    h.style.left = x + 'px';
+    h.style.top = y + 'px';
+    h.style.setProperty('--tx', (Math.random() * 200 - 100) + 'px');
+    h.style.setProperty('--ty', (-Math.random() * 120 - 50) + 'px');
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 1300);
+  }
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+function placeholderIcon() { return '<div class="placeholder-icon"><i class="fas fa-book"></i></div>'; }
+function countWords(t) { return (t || '').trim().split(/\s+/).filter(Boolean).length; }
+function formatCount(n) {
+  n = n || 0;
+  if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+  if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
+  return String(n);
+}
+function isLikedByMe(id) { return !!myLikes[id]; }
+
+function countViewIfNew(storyId, chapterIndex) {
+  const story = stories.find(s => s.id === storyId);
+  if (!story) return;
+  if (!myViews[storyId]) myViews[storyId] = {};
+  const key = 'c' + chapterIndex;
+  if (myViews[storyId][key]) return;
+  myViews[storyId][key] = true;
+  story.views = (story.views || 0) + 1;
+  saveMyViews();
+  saveStories();
+}
+
+function toggleLike(storyId) {
+  const story = stories.find(s => s.id === storyId);
+  if (!story) return;
+  if (myLikes[storyId]) {
+    myLikes[storyId] = false;
+    story.likes = Math.max(0, (story.likes || 0) - 1);
+    showToast('💔 Like removed');
+  } else {
+    myLikes[storyId] = true;
+    story.likes = (story.likes || 0) + 1;
+    hearts++; saveHearts();
+    showToast('💖 You liked this story!');
+    hinataSay('"Thank you for the like!" 💜');
+  }
+  saveMyLikes();
+  saveStories();
+  renderAll();
+}
+
+function storyCardHTML(story, showDelete) {
+  const cover = story.cover
+    ? '<img src="' + story.cover + '" alt="cover">'
+    : placeholderIcon();
+  const liked = isLikedByMe(story.id);
+  const heartIcon = liked ? 'fas fa-heart' : 'far fa-heart';
+  const chapterCount = (story.chapters || []).length;
+  const chapLabel = chapterCount === 1 ? '1 chapter' : chapterCount + ' chapters';
+  const likeCount = story.likes || 0;
+  const viewCount = story.views || 0;
+
+  return '<article class="story-card" data-open="' + story.id + '">' +
+    '<div class="story-cover">' +
+      '<span class="story-genre">' + escapeHtml(story.genre || 'General') + '</span>' +
+      '<span class="chapter-badge"><i class="fas fa-book-open"></i> ' + chapLabel + '</span>' +
+      (showDelete ? '<button class="delete-btn" title="Delete" data-delete="' + story.id + '"><i class="fas fa-trash"></i></button>' : '') +
+      cover +
+    '</div>' +
+    '<div class="story-info">' +
+      '<div class="story-title">' + escapeHtml(story.title) + '</div>' +
+      '<div class="story-author"><i class="fas fa-pen"></i> by ' + escapeHtml(story.author) + '</div>' +
+      (story.desc ? '<div class="story-desc">' + escapeHtml(story.desc) + '</div>' : '') +
+      '<div class="story-stats">' +
+        '<span class="like-stat"><i class="' + heartIcon + '"></i> ' + formatCount(likeCount) + '</span>' +
+        '<span><i class="fas fa-eye"></i> ' + formatCount(viewCount) + '</span>' +
+      '</div>' +
+      '<div class="card-actions">' +
+        '<button class="card-action ' + (liked ? 'liked' : '') + '" data-like="' + story.id + '">' +
+          '<i class="' + heartIcon + '"></i> ' + (liked ? 'Liked' : 'Like') +
+        '</button>' +
+        '<button class="card-action" data-open="' + story.id + '"><i class="fas fa-book-open"></i> Read</button>' +
+      '</div>' +
+    '</div>' +
+  '</article>';
+}
+
+function emptyStateHTML(opts) {
+  return '<div class="empty-state">' +
+    '<i class="' + opts.icon + '"></i>' +
+    '<h4>' + opts.title + '</h4>' +
+    '<p>' + opts.message + '</p>' +
+    (opts.showBtn ? '<button class="btn-primary" data-nav="write"><i class="fas fa-plus"></i> Write a story</button>' : '') +
+  '</div>';
+}
+
+function renderAll() {
+  const query = currentSearch.trim().toLowerCase();
+  const filtered = query
+    ? stories.filter(s =>
+        s.title.toLowerCase().includes(query) ||
+        s.author.toLowerCase().includes(query) ||
+        (s.genre || '').toLowerCase().includes(query))
+    : stories;
+
+  discoverCount.textContent = stories.length === 1 ? '✨ 1 story' : '✨ ' + stories.length + ' stories';
+  libraryCount.textContent = stories.length === 1 ? '✨ 1 story' : '✨ ' + stories.length + ' stories';
+
+  if (filtered.length === 0) {
+    discoverGrid.innerHTML = emptyStateHTML({
+      icon: 'fas fa-compass',
+      title: query ? 'No matches found' : 'No stories yet',
+      message: query ? 'Try a different search term.' : 'Be the first to share a story on Rene Tales!',
+      showBtn: !query
+    });
+    libraryGrid.innerHTML = emptyStateHTML({
+      icon: 'fas fa-bookmark',
+      title: query ? 'No matches found' : 'Your library is empty',
+      message: query ? 'Try a different search term.' : 'Stories you publish will appear here. Start writing!',
+      showBtn: !query
+    });
+  } else {
+    discoverGrid.innerHTML = filtered.map(s => storyCardHTML(s, false)).join('');
+    libraryGrid.innerHTML = filtered.map(s => storyCardHTML(s, true)).join('');
+  }
+
+  hinataBooksEl.textContent = stories.length;
+}
+
+function goToPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const target = document.getElementById('page-' + page);
+  if (target) target.classList.add('active');
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.classList.toggle('active', a.dataset.nav === page);
+  });
+  if (['discover', 'library', 'write'].includes(page)) lastMainPage = page;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+document.addEventListener('click', function (e) {
+  const navEl = e.target.closest('[data-nav]');
+  if (navEl) {
+    e.preventDefault();
+    goToPage(navEl.dataset.nav);
+  }
+});
+
+form.addEventListener('submit', function (e) {
+  e.preventDefault();
+  e.stopPropagation();
+  const titleEl = document.getElementById('storyTitle');
+  const authorEl = document.getElementById('storyAuthor');
+  const genreEl = document.getElementById('storyGenre');
+  const descEl = document.getElementById('storyDesc');
+
+  const title = titleEl.value.trim();
+  const author = authorEl.value.trim();
+  const genre = genreEl.value.trim() || 'General';
+  const desc = descEl.value.trim();
+
+  if (!title) { showToast('❌ Please enter a story title', true); titleEl.focus(); return; }
+  if (!author) { showToast('❌ Please enter an author name', true); authorEl.focus(); return; }
+
+  const newStory = {
+    id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+    title, author, genre, desc,
+    cover: currentImageData || null,
+    chapters: [],
+    likes: 0,
+    views: 0,
+    createdAt: Date.now()
+  };
+  stories.unshift(newStory);
+  saveStories();
+  renderAll();
+  form.reset();
+  currentImageData = null;
+  imagePreview.innerHTML = '<span>Preview</span>';
+
+  showToast('🌸 "' + title + '" created! Now add chapters.');
+  hinataSay('"Nice! Now add Part 1 below!" 💜');
+  if (hinataAvatar) {
+    const rect = hinataAvatar.getBoundingClientRect();
+    spawnHearts(rect.left + rect.width / 2, rect.top + rect.height / 2, 12);
+  }
+  openStoryDetail(newStory.id);
+});
+
+imageInput.addEventListener('change', function (e) {
+  const file = e.target.files[0];
+  if (!file) { currentImageData = null; imagePreview.innerHTML = '<span>Preview</span>'; return; }
+  if (!file.type.startsWith('image/')) {
+    showToast('❌ Please pick an image file', true);
+    imageInput.value = ''; return;
+  }
+  const reader = new FileReader();
+  reader.onload = function (ev) {
+    currentImageData = ev.target.result;
+    imagePreview.innerHTML = '<img src="' + currentImageData + '" alt="Cover preview">';
+  };
+  reader.readAsDataURL(file);
+});
+
+function openStoryDetail(storyId) {
+  const story = stories.find(s => s.id === storyId);
+  if (!story) { showToast('❌ Story not found', true); return; }
+  activeStoryId = storyId;
+  activeChapterIndex = -1;
+
+  const chapters = story.chapters || [];
+  const totalWords = chapters.reduce((sum, c) => sum + countWords(c.text), 0);
+  const coverHTML = story.cover
+    ? '<img src="' + story.cover + '" alt="cover">'
+    : '<i class="fas fa-book"></i>';
+
+  const chapterListHTML = chapters.length === 0
+    ? '<div style="text-align:center; padding:1.5rem; color: var(--text-muted); background:#fdf3f7; border-radius:12px; border: 2px dashed var(--border-light);">' +
+        '<i class="fas fa-feather-alt" style="font-size:2rem; color: var(--sakura); display:block; margin-bottom:0.5rem;"></i>' +
+        'No chapters yet. Add your first chapter below! 🌸' +
+      '</div>'
+    : chapters.map((ch, i) => {
+        const words = countWords(ch.text);
+        const preview = (ch.text || '').slice(0, 70).replace(/\s+/g, ' ');
+        return '<div class="chapter-item" data-chapter="' + i + '">' +
+          '<div class="ch-left">' +
+            '<div class="chapter-num">' + (i + 1) + '</div>' +
+            '<div style="min-width:0; flex:1;">' +
+              '<div class="ch-title">' + escapeHtml(ch.title) + '</div>' +
+              '<div class="ch-meta">' + words + ' words · ' + escapeHtml(preview) + (preview.length >= 70 ? '...' : '') + '</div>' +
+            '</div>' +
+          '</div>' +
+          '<i class="fas fa-chevron-right"></i>' +
+        '</div>';
+      }).join('');
+
+  const liked = isLikedByMe(story.id);
+  const heartIcon = liked ? 'fas fa-heart' : 'far fa-heart';
+  const likeCount = story.likes || 0;
+  const viewCount = story.views || 0;
+
+  storyDetailContainer.innerHTML =
+    '<button class="btn-secondary" id="backBtn" style="margin-bottom:1rem;"><i class="fas fa-arrow-left"></i> Back</button>' +
+    '<div class="story-detail-hero">' +
+      '<div class="detail-cover">' + coverHTML + '</div>' +
+      '<div class="detail-info">' +
+        '<span class="detail-genre">' + escapeHtml(story.genre || 'General') + '</span>' +
+        '<h1 class="detail-title">' + escapeHtml(story.title) + '</h1>' +
+        '<div class="detail-author"><i class="fas fa-pen"></i> by ' + escapeHtml(story.author) + '</div>' +
+        (story.desc ? '<div class="detail-desc">' + escapeHtml(story.desc) + '</div>' : '') +
+        '<div class="detail-stats">' +
+          '<div class="detail-stat"><i class="fas fa-book-open"></i><strong>' + chapters.length + '</strong><span>Chapters</span></div>' +
+          '<div class="detail-stat"><i class="fas fa-align-left"></i><strong>' + totalWords + '</strong><span>Words</span></div>' +
+          '<div class="detail-stat"><i class="fas fa-eye"></i><strong>' + formatCount(viewCount) + '</strong><span>Views</span></div>' +
+          '<div class="detail-stat"><i class="fas fa-heart"></i><strong>' + formatCount(likeCount) + '</strong><span>Likes</span></div>' +
+        '</div>' +
+        '<div class="detail-actions">' +
+          '<button class="btn-primary" id="startReadingBtn"><i class="fas fa-book-reader"></i> ' +
+            (chapters.length ? 'Start reading' : 'Add a chapter first') +
+          '</button>' +
+          '<button class="btn-secondary" id="detailLikeBtn"><i class="' + heartIcon + '"></i> ' + (liked ? 'Liked' : 'Like') + ' (' + likeCount + ')</button>' +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="upload-form">' +
+      '<h3><i class="fas fa-list-ol"></i> Chapters</h3>' +
+      '<div class="chapter-list">' + chapterListHTML + '</div>' +
+      '<div class="write-chapter-box">' +
+        '<h4><i class="fas fa-plus-circle"></i> Add a new chapter</h4>' +
+        '<input type="text" id="newChapterTitle" placeholder="Chapter title (e.g. Part 1 — The Beginning)">' +
+        '<textarea id="newChapterText" placeholder="Write your chapter here...&#10;&#10;Line breaks are kept, so write freely!"></textarea>' +
+        '<button class="btn-submit" id="addChapterBtn"><i class="fas fa-save"></i> Save chapter</button>' +
+      '</div>' +
+    '</div>';
+
+  goToPage('story');
+  attachStoryDetailEvents();
+}
+
+function attachStoryDetailEvents() {
+  const backBtn = document.getElementById('backBtn');
+  if (backBtn) backBtn.addEventListener('click', function () {
+    goToPage(lastMainPage || 'discover');
+  });
+
+  const startBtn = document.getElementById('startReadingBtn');
+  if (startBtn) startBtn.addEventListener('click', function () {
+    const story = stories.find(s => s.id === activeStoryId);
+    if (!story || !story.chapters.length) {
+      const input = document.getElementById('newChapterTitle');
+      if (input) { input.focus(); input.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+      showToast('📝 Write your first chapter below!');
+      return;
+    }
+    openChapterReading(0);
+  });
+
+  const likeBtn = document.getElementById('detailLikeBtn');
+  if (likeBtn) likeBtn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    toggleLike(activeStoryId);
+    openStoryDetail(activeStoryId);
+  });
+
+  storyDetailContainer.querySelectorAll('[data-chapter]').forEach(el => {
+    el.addEventListener('click', function () {
+      const idx = parseInt(this.getAttribute('data-chapter'), 10);
+      openChapterReading(idx);
+    });
+  });
+
+  const addBtn = document.getElementById('addChapterBtn');
+  if (addBtn) addBtn.addEventListener('click', function () {
+    const story = stories.find(s => s.id === activeStoryId);
+    if (!story) return;
+    const titleInput = document.getElementById('newChapterTitle');
+    const textInput = document.getElementById('newChapterText');
+    const title = (titleInput.value || '').trim()
+      || ('Part ' + ((story.chapters || []).length + 1));
+    const text = (textInput.value || '').trim();
+    if (!text) {
+      showToast('❌ Write some content for the chapter', true);
+      textInput.focus();
+      return;
+    }
+    story.chapters = story.chapters || [];
+    story.chapters.push({ title, text, createdAt: Date.now() });
+    saveStories();
+    showToast('📖 "' + title + '" saved!');
+    hinataSay('"A new chapter! Nice work!" 💜');
+    if (hinataAvatar) {
+      const rect = hinataAvatar.getBoundingClientRect();
+      spawnHearts(rect.left + rect.width / 2, rect.top + rect.height / 2, 8);
+    }
+    openStoryDetail(activeStoryId);
+  });
+}
+
+function openChapterReading(idx) {
+  const story = stories.find(s => s.id === activeStoryId);
+  if (!story) return;
+  const chapters = story.chapters || [];
+  if (idx < 0 || idx >= chapters.length) return;
+  activeChapterIndex = idx;
+  const ch = chapters[idx];
+
+  countViewIfNew(story.id, idx);
+
+  readingContainer.innerHTML =
+    '<button class="btn-secondary" id="backToStoryBtn" style="margin-bottom:1rem;"><i class="fas fa-arrow-left"></i> Back to story</button>' +
+    '<div class="reading-header">' +
+      '<div class="rh-left">' +
+        '<h2>' + escapeHtml(ch.title) + '</h2>' +
+        '<div class="rh-sub">' + escapeHtml(story.title) + ' · by ' + escapeHtml(story.author) + ' · Chapter ' + (idx + 1) + ' of ' + chapters.length + '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="reading-body">' +
+      '<button class="chapter-list-trigger" id="openChapterListBtn">' +
+        '<i class="fas fa-list-ol"></i> Chapter List (' + chapters.length + ')' +
+      '</button>' +
+      '<div class="reading-content">' + escapeHtml(ch.text) + '</div>' +
+      '<div class="reading-nav">' +
+        '<button class="btn-secondary" id="prevChBtn" ' + (idx === 0 ? 'disabled' : '') + '><i class="fas fa-chevron-left"></i> Previous</button>' +
+        '<button class="btn-secondary" id="nextChBtn" ' + (idx === chapters.length - 1 ? 'disabled' : '') + '>Next <i class="fas fa-chevron-right"></i></button>' +
+      '</div>' +
+    '</div>';
+
+  goToPage('reading');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  document.getElementById('backToStoryBtn').addEventListener('click', function () {
+    openStoryDetail(activeStoryId);
+  });
+  document.getElementById('openChapterListBtn').addEventListener('click', function () {
+    openChapterModal();
+  });
+  document.getElementById('prevChBtn').addEventListener('click', function () {
+    if (activeChapterIndex > 0) openChapterReading(activeChapterIndex - 1);
+  });
+  document.getElementById('nextChBtn').addEventListener('click', function () {
+    if (activeChapterIndex < chapters.length - 1) openChapterReading(activeChapterIndex + 1);
+  });
+}
+
+function openChapterModal() {
+  const story = stories.find(s => s.id === activeStoryId);
+  if (!story) return;
+  const chapters = story.chapters || [];
+  modalStoryTitle.textContent = story.title;
+
+  if (chapters.length === 0) {
+    chapterModalBody.innerHTML = '<p style="text-align:center; color: var(--text-muted); padding: 1rem;">No chapters yet.</p>';
+  } else {
+    chapterModalBody.innerHTML = chapters.map((ch, i) => {
+      const words = countWords(ch.text);
+      const isCurrent = i === activeChapterIndex;
+      const isRead = myViews[story.id] && myViews[story.id]['c' + i];
+      return '<div class="chapter-item ' + (isCurrent ? 'current' : '') + '" data-modal-chapter="' + i + '">' +
+        '<div class="ch-left">' +
+          '<div class="chapter-num">' + (i + 1) + '</div>' +
+          '<div style="min-width:0; flex:1;">' +
+            '<div class="ch-title">' + escapeHtml(ch.title) +
+              (isCurrent ? ' <span style="color: var(--sakura-dark); font-size: 0.75rem;">(reading)</span>' : '') +
+              (isRead && !isCurrent ? ' <span style="color: var(--text-muted); font-size: 0.7rem;">✓</span>' : '') +
+            '</div>' +
+            '<div class="ch-meta">' + words + ' words</div>' +
+          '</div>' +
+        '</div>' +
+        '<i class="fas fa-chevron-right"></i>' +
+      '</div>';
+    }).join('');
+  }
+  chapterModalOverlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeChapterModalFn() {
+  chapterModalOverlay.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+if (closeChapterModal) closeChapterModal.addEventListener('click', closeChapterModalFn);
+if (chapterModalOverlay) chapterModalOverlay.addEventListener('click', function (e) {
+  if (e.target === chapterModalOverlay) closeChapterModalFn();
+});
+chapterModalBody.addEventListener('click', function (e) {
+  const item = e.target.closest('[data-modal-chapter]');
+  if (!item) return;
+  const idx = parseInt(item.getAttribute('data-modal-chapter'), 10);
+  closeChapterModalFn();
+  openChapterReading(idx);
+});
+
+document.addEventListener('click', function (e) {
+  const delBtn = e.target.closest('[data-delete]');
+  if (delBtn) {
+    e.stopPropagation();
+    e.preventDefault();
+    const id = delBtn.getAttribute('data-delete');
+    const story = stories.find(s => s.id === id);
+    if (!story) return;
+    if (confirm('Delete "' + story.title + '"? All its chapters will be lost.')) {
+      stories = stories.filter(s => s.id !== id);
+      delete myLikes[id];
+      if (myViews[id]) delete myViews[id];
+      saveStories(); saveMyLikes(); saveMyViews(); renderAll();
+      showToast('🗑️ Story deleted');
+      if (activeStoryId === id) { activeStoryId = null; goToPage(lastMainPage || 'discover'); }
+    }
+    return;
+  }
+  const likeBtn = e.target.closest('[data-like]');
+  if (likeBtn) {
+    e.stopPropagation();
+    e.preventDefault();
+    toggleLike(likeBtn.getAttribute('data-like'));
+    return;
+  }
+  const openEl = e.target.closest('[data-open]');
+  if (openEl) {
+    e.stopPropagation();
+    e.preventDefault();
+    openStoryDetail(openEl.getAttribute('data-open'));
+    return;
+  }
+});
+
+searchBtn.addEventListener('click', function () { currentSearch = searchInput.value; renderAll(); });
+searchInput.addEventListener('input', function () { currentSearch = this.value; renderAll(); });
+
+if (hinataAvatar) {
+  hinataAvatar.addEventListener('click', function (e) {
+    e.stopPropagation();
+    hinataSay(saintTips[Math.floor(Math.random() * saintTips.length)]);
+    hearts++; saveHearts();
+    const rect = hinataAvatar.getBoundingClientRect();
+    spawnHearts(rect.left + rect.width / 2, rect.top + rect.height / 2, 10);
+  });
+}
+if (hinataSurprise) {
+  hinataSurprise.addEventListener('click', function (e) {
+    e.stopPropagation();
+    hinataSay(saintTips[Math.floor(Math.random() * saintTips.length)]);
+    hearts++; saveHearts();
+    const rect = hinataSurprise.getBoundingClientRect();
+    spawnHearts(rect.left + rect.width / 2, rect.top, 6);
+  });
+}
+if (floatingHinata) {
+  floatingHinata.addEventListener('click', function (e) {
+    e.stopPropagation();
+    hinataSay(saintTips[Math.floor(Math.random() * saintTips.length)]);
+    hearts++; saveHearts();
+    const rect = floatingHinata.getBoundingClientRect();
+    spawnHearts(rect.left + rect.width / 2, rect.top, 12);
+  });
+}
+
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape' && chapterModalOverlay.classList.contains('active')) {
+    closeChapterModalFn();
+  }
+});
+
+loadAll();
+hinataHeartsEl.textContent = hearts;
+renderAll();
+</script>
+</body>
+</html>
