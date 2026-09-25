@@ -558,6 +558,65 @@ body {
   border-radius: 50%; animation: spin 0.8s linear infinite;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
+
+/* ============ MAMA! Jumpscare ============ */
+.mama-jumpscare {
+  position: fixed; inset: 0;
+  background: rgba(0, 0, 0, 0.92);
+  z-index: 99999;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.12s ease;
+  padding: 1rem;
+}
+.mama-jumpscare.active { opacity: 1; pointer-events: auto; }
+.mama-text {
+  font-family: 'Sawarabi Mincho', serif;
+  font-size: clamp(2rem, 10vw, 6rem);
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: 0.05em;
+  text-align: center;
+  text-shadow:
+    0 0 20px #ff2d55,
+    0 0 40px #ff2d55,
+    0 0 80px #ff2d55,
+    0 0 120px #ff2d55;
+  transform: scale(0);
+  animation: mamaPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
+             mamaShake 0.15s ease-in-out 0.3s 3,
+             mamaFade 0.5s ease 1.8s forwards;
+  line-height: 1.1;
+  padding: 1rem;
+  max-width: 95vw;
+  max-height: 90vh;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  user-select: none;
+}
+@keyframes mamaPop { 0% { transform: scale(0) rotate(-15deg); } 100% { transform: scale(1) rotate(0deg); } }
+@keyframes mamaShake {
+  0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+  25% { transform: translate(-10px, 5px) scale(1.05) rotate(-3deg); }
+  50% { transform: translate(10px, -5px) scale(1.05) rotate(3deg); }
+  75% { transform: translate(-8px, -3px) scale(1.03) rotate(-2deg); }
+}
+@keyframes mamaFade { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1.2); } }
+.mama-skip {
+  position: absolute; bottom: 2rem; left: 50%;
+  transform: translateX(-50%);
+  background: transparent;
+  border: 2px solid rgba(255,255,255,0.4);
+  color: rgba(255,255,255,0.7);
+  padding: 0.6rem 1.5rem; border-radius: 60px;
+  font-family: inherit; font-size: 0.85rem; cursor: pointer;
+  opacity: 0; transition: opacity 0.3s ease;
+  z-index: 10;
+  white-space: nowrap;
+}
+.mama-jumpscare.active .mama-skip { opacity: 1; transition-delay: 0.8s; }
+.mama-skip:hover { background: rgba(255,255,255,0.1); color: white; }
+
 @media (max-width: 700px) {
   .navbar { padding: 0.9rem 1.2rem; flex-direction: column; align-items: stretch; }
   .nav-links { justify-content: space-between; gap: 0.8rem; }
@@ -578,10 +637,17 @@ body {
   .story-grid { grid-template-columns: 1fr 1fr; }
   .story-info { padding: 0.8rem; }
   .story-title { font-size: 0.9rem; }
+  .mama-text { font-size: clamp(2.5rem, 18vw, 4rem); }
 }
 </style>
 </head>
 <body>
+
+<!-- MAMA! Jumpscare -->
+<div class="mama-jumpscare" id="mamaJumpscare">
+  <div class="mama-text" id="mamaText">MAMAAAA!!</div>
+  <button class="mama-skip" id="mamaSkip">hehe okay 👉</button>
+</div>
 
 <header class="navbar">
   <div class="logo-wrap">
@@ -791,6 +857,9 @@ function startApp() {
   const LIKES_KEY = 'rene_tales_likes';
   const VIEWS_KEY = 'rene_tales_views';
 
+  // 🎵 Sound file — must be uploaded to GitHub as mama.mp3
+  const MAMA_SOUND_URL = 'mama.mp3';
+
   let stories = [];
   let currentImageData = null;
   let currentSearch = '';
@@ -850,6 +919,22 @@ function startApp() {
       h.style.setProperty('--ty', (-Math.random() * 120 - 50) + 'px');
       document.body.appendChild(h);
       setTimeout(() => h.remove(), 1300);
+    }
+  }
+
+  // 🎵 Play MAMA sound — shared function
+  function playMamaSound() {
+    try {
+      const sound = new Audio(MAMA_SOUND_URL);
+      sound.volume = 1.0;
+      const p = sound.play();
+      if (p && p.catch) {
+        p.catch(function(err) {
+          console.log('Sound failed:', err.message);
+        });
+      }
+    } catch (err) {
+      console.log('Audio error:', err);
     }
   }
 
@@ -1290,6 +1375,8 @@ function startApp() {
       hearts++; saveHearts();
       const rect = hinataSurprise.getBoundingClientRect();
       spawnHearts(rect.left + rect.width / 2, rect.top, 6);
+      // 🎵 Play MAMA sound when Tip button is clicked
+      playMamaSound();
     });
   }
   if (floatingHinata) {
@@ -1305,6 +1392,47 @@ function startApp() {
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape' && chapterModalOverlay.classList.contains('active')) closeChapterModalFn();
   });
+
+  /* ============ MAMA! silent jumpscare (visual only) ============ */
+  (function mamaJumpscare() {
+    const overlay = document.getElementById('mamaJumpscare');
+    const textEl = document.getElementById('mamaText');
+    const skipBtn = document.getElementById('mamaSkip');
+    if (!overlay) return;
+
+    const mamaLines = [
+      'MAMAAAA!!',
+      'MAMAAAA?!',
+      'MAAMAAAAAA!!',
+      'MAMAAAAA!!! 😱',
+      'MAMAAAAA!!'
+    ];
+
+    function triggerMama() {
+      textEl.textContent = mamaLines[Math.floor(Math.random() * mamaLines.length)];
+      overlay.classList.add('active');
+      textEl.style.animation = 'none';
+      void textEl.offsetWidth;
+      textEl.style.animation = '';
+      setTimeout(() => { overlay.classList.remove('active'); }, 2200);
+    }
+
+    function hideMama() { overlay.classList.remove('active'); }
+
+    const MAMA_KEY = 'rene_tales_mama_shown';
+    if (!sessionStorage.getItem(MAMA_KEY)) {
+      sessionStorage.setItem(MAMA_KEY, '1');
+      setTimeout(triggerMama, 400);
+    }
+
+    overlay.addEventListener('click', hideMama);
+    if (skipBtn) {
+      skipBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        hideMama();
+      });
+    }
+  })();
 
   loadLocal();
   hinataHeartsEl.textContent = hearts;
